@@ -28,17 +28,7 @@ Module ModuleBanco
     End Function
 
 
-    Private Sub desconectar()
-        Try
-            If Not IsNothing(objConexao) Then
-                If objConexao.State = ConnectionState.Open Then
-                    objConexao.Close()
-                End If
-            End If
-        Catch ex As Exception
-            Throw ex
-        End Try
-    End Sub
+
 
 
 

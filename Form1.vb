@@ -16,6 +16,7 @@
            '" & TextBoxCidade.Text & "',
            '" & TextBoxUf.Text & "')")
             MessageBox.Show("Inserido ao banco de dados")
+            atualizaTabela()
         Catch ex As Exception
             MessageBox.Show("Erro ao inserir no banco de dados")
         End Try
@@ -27,7 +28,7 @@
         If TextBoxCep.Text.Equals("") Then
             MessageBox.Show("Informe um cep valido")
         Else
-            Dim endereco As cep = ModuleApi.cep.ObterEndereco(TextBoxCep.Text)
+            Dim endereco As cep = ModuleApi.cep.ObterEndereco(TextBoxCep.Text.Trim())
 
             TextBoxEndereco.Text = endereco.logradouro
             TextBoxCidade.Text = endereco.localidade
@@ -87,19 +88,35 @@
  WHERE id = " & idSelecionado & "")
 
             MessageBox.Show("Item com id = " & idSelecionado & " alterado no banco de dados")
+            atualizaTabela()
         Catch ex As Exception
             MessageBox.Show("Erro ao alterar item com id = " & idSelecionado & " no banco de dados")
         End Try
 
-        atualizaTabela()
 
     End Sub
 
     Private Sub ButtonExcluir_Click(sender As Object, e As EventArgs) Handles ButtonExcluir.Click
-        MessageBox.Show("deseja mesmo excluir o item da tabela com id = " & idSelecionado & " ?")
-        ModuleBanco.ExecuteQuery("DELETE FROM dbo.cep_endereco
+
+        If MessageBox.Show("Deseja mesmo excluir o item da tabela com id = " & idSelecionado & " ?", "", MessageBoxButtons.OKCancel) = DialogResult.OK Then
+
+            Try
+
+                ModuleBanco.ExecuteQuery("DELETE FROM dbo.cep_endereco
       WHERE id = " & idSelecionado & "")
-        atualizaTabela()
+                atualizaTabela()
+
+            Catch ex As Exception
+
+            End Try
+
+        End If
+
+
+
+
+
+
     End Sub
 
     Private Sub atualizaTabela()
